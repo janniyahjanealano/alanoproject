@@ -1,0 +1,57 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function getUserData(uid) {
+      return get(/databases/$(database)/documents/users/$(uid)).data;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && getUserData(request.auth.uid).role == 'admin';
+    }
+
+    function isBlocked() {
+      return isSignedIn() && getUserData(request.auth.uid).isBlocked == true;
+    }
+
+    function isAuthorized() {
+      return isSignedIn() && request.auth.token.email.matches('.*@neu\\.edu\\.ph$');
+    }
+
+    match /users/{uid} {
+      allow get: if isAuthorized();
+      allow list: if isAuthorized() && isAdmin();
+      // Allow creation only if the user is authenticated and matches their own UID.
+      // We enforce the email domain in the creation data as well.
+      allow create: if isSignedIn() && request.auth.uid == uid 
+                   && request.resource.data.email.matches('.*@neu\\.edu\\.ph$');
+      allow update: if isAuthorized() && (isAdmin() || request.auth.uid == uid);
+    }
+
+    match /visits/{visitId} {
+      allow read: if isAuthorized() && (isAdmin() || resource.data.userId == request.auth.uid);
+      allow create: if isAuthorized() && !isBlocked() && request.resource.data.userId == request.auth.uid;
+    }
+
+    match /library_logs/{logId} {
+      allow read: if isAuthorized() && (isAdmin() || resource.data.userId == request.auth.uid);
+      allow create: if isAuthorized() && !isBlocked() && request.resource.data.userId == request.auth.uid;
+    }
+
+    match /dean_logs/{logId} {
+      allow read: if isAuthorized() && (isAdmin() || resource.data.userId == request.auth.uid);
+      allow create: if isAuthorized() && !isBlocked() && request.resource.data.userId == request.auth.uid;
+    }
+
+    match /user_sessions/{uid} {
+      allow read: if isAuthorized() && (request.auth.uid == uid || isAdmin());
+      allow write: if isAuthorized() && request.auth.uid == uid;
+      allow delete: if isAuthorized() && (request.auth.uid == uid || isAdmin());
+    }
+  }
+}
