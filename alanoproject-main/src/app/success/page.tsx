@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle2, Home, ArrowRight, Sparkles } from "lucide-react";
 import { Button } from '@/components/ui/button';
+// Build Trigger: Testing Loader2 import
 import { Loader2 } from "lucide-react";
 
 function SuccessContent() {
