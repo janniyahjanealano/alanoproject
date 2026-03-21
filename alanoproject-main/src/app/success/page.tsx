@@ -63,7 +63,7 @@ function SuccessContent() {
 
 export default function SuccessPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-background"><span className="inline-block animate-spin text-2xl">🌀</span></div>}>
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-background"><span className="animate-spin text-2xl">🌀</span></div>}>
       <SuccessContent />
     </Suspense>
   );
