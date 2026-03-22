@@ -18,6 +18,6 @@ NEU CampLib is a mobile-first web application designed to streamline the library
 ## 📦 Installation & Setup
 
 🔗 Live Development Demo
-Check out the live environment here: <a href="https://9000-firebase-studio-1773958445818.cluster-ulqnojp5endvgve6krhe7klaws.cloudworkstations.dev" target="_blank" rel="noopener noreferrer">Firebase Studio Demo</a>
+Check out the live environment here: <a href="https://alanoproject.vercel.app/" target="_blank" rel="noopener noreferrer">Firebase Studio Demo</a>
   
    
